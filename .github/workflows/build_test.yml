@@ -1,0 +1,62 @@
+name: CMake
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: lukka/get-cmake@latest
+    - name: Update
+      run: sudo apt-get update -y && sudo apt-get install -y x11-utils && sudo apt-get install libxrandr-dev libpthread-stubs0-dev libx11-dev libxau-dev libxcb1-dev libxdmcp-dev libxext-dev libxrandr-dev libxrender-dev x11proto-core-dev x11proto-dev x11proto-randr-dev x11proto-xext-dev xorg-sgml-doctools xtrans-dev libxinerama-dev libpthread-stubs0-dev libx11-dev libxau-dev libxcb1-dev libxdmcp-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev x11proto-core-dev x11proto-dev x11proto-randr-dev x11proto-xext-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev libxcursor-dev libxi-dev libpthread-stubs0-dev libx11-dev libxau-dev libxcb1-dev libxcursor-dev libxcursor1 libxdmcp-dev libxext-dev libxfixes-dev libxi-dev libxinerama-dev libxrandr-dev libxrender-dev x11proto-core-dev x11proto-dev x11proto-input-dev x11proto-randr-dev x11proto-xext-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev libgl-dev libgl-dev libglx-dev libpthread-stubs0-dev libx11-dev libxau-dev libxcb1-dev libxcursor-dev libxcursor1 libxdmcp-dev libxext-dev libxfixes-dev libxi-dev libxinerama-dev libxrandr-dev libxrender-dev x11proto-core-dev x11proto-dev x11proto-input-dev x11proto-randr-dev x11proto-xext-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev libsfml-dev alsa-topology-conf alsa-ucm-conf libasound2 libasound2-data libasyncns0 libflac8 libgl-dev libglx-dev libogg0 libopenal-data libopenal1 libpthread-stubs0-dev libpulse0 libsfml-audio2.5 libsfml-dev libsfml-graphics2.5 libsfml-network2.5 libsfml-system2.5 libsfml-window2.5 libsndfile1 libsndio7.0 libvorbis0a libvorbisenc2 libvorbisfile3 libwrap0 libx11-dev libxau-dev libxcb1-dev libxcursor-dev libxcursor1 libxdmcp-dev libxext-dev libxfixes-dev libxi-dev libxinerama-dev libxrandr-dev libxrender-dev x11proto-core-dev x11proto-dev x11proto-input-dev x11proto-randr-dev x11proto-xext-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev
+    - name: pip install Conan
+      run: pip install conan
+    - name: install libraries
+      run: |
+        sudo apt -y install libudev-dev
+        sudo apt-get install -y libgl-dev
+        sudo apt-get install -y libx11-xcb-dev
+        sudo apt-get install -y libfontenc-dev
+        sudo apt-get install -y libxaw7-dev
+        sudo apt-get install -y libxcomposite-dev
+        sudo apt-get install -y libxdamage-dev
+        sudo apt-get install -y libxmu-dev
+        sudo apt-get install -y libxmuu-dev
+        sudo apt-get install -y libxpm-dev
+        sudo apt-get install -y libxres-dev
+        sudo apt-get install -y libxss-dev
+        sudo apt-get install -y libxtst-dev
+        sudo apt-get install -y libxv-dev
+        sudo apt-get install -y libxvmc-dev
+        sudo apt-get install -y libxxf86vm-dev
+        sudo apt-get install -y libxcb-render-util0-dev
+        sudo apt-get install -y libxcb-xkb-dev
+        sudo apt-get install -y libxcb-icccm4-dev
+        sudo apt-get install -y libxcb-image0-dev
+        sudo apt-get install -y libxcb-keysyms1-dev
+        sudo apt-get install -y libxcb-randr0-dev
+        sudo apt-get install -y libxcb-shape0-dev
+        sudo apt-get install -y libxcb-sync-dev
+        sudo apt-get install -y libxcb-xfixes0-dev
+        sudo apt-get install -y libxcb-xinerama0-dev
+        sudo apt-get install -y libxcb-dri3-dev
+        sudo apt-get install -y libxcb-util-dev
+        sudo apt-get install -y pkg-config
+        sudo apt-get install -y libxkbfile-dev
+        sudo apt-get install -y xkb-data
+        sudo apt-get install -y uuid-dev
+    - name: Install cmake
+      run:  sudo apt-get -y install cmake
+    - name: initiliaze conan
+      run: conan install . -c tools.system.package_manager:mode=install
+    - name: Build
+      run: ./build.sh
